@@ -279,5 +279,35 @@
             "r_c urges m_c to keep the area extra clean after one of the bumps pops.",
             "One of the bumps on m_c's skin has popped, but {PRONOUN/m_c/subject}{VERB/m_c/'re/'s} working to keep it clean."
         ]
+    },
+    "wobbly" : {
+        "broken back": [
+            "m_c had to be carried home after a bad fall. r_c confirms that {PRONOUN/m_c/poss} back is broken.",
+            "A bad fall has left m_c with a broken back."
+        ],
+        "broken bone": [
+            "m_c limped home after a bad fall. r_c confirms that {PRONOUN/m_c/poss} leg is broken.",
+            "m_c needed help getting back to camp after breaking {PRONOUN/m_c/poss} leg during a bad fall."
+        ],
+        "dislocated joint": [
+            "m_c twisted their paw badly. r_c confirms the joint is dislocated.",
+            "m_c's lack of coordination caused {PRONOUN/m_c/object} to dislocate their paw."
+        ],
+        "sprain": [
+            "m_c took a bad step, leaving {PRONOUN/m_c/poss} paw sore.",
+            "m_c twisted {PRONOUN/m_c/poss} paw."
+        ],
+        "bruises": [
+            "m_c fell over, and {PRONOUN/m_c/poss} side is bruised.",
+            "m_c took a tumble, leaving {PRONOUN/m_c/poss} with bruises."
+        ],
+        "sore":[
+            "m_c is sore after a fall.",
+            "m_c is sore after a tumble."
+        ],
+        "scrapes": [
+            "m_c is scraped up after taking a tumble.",
+            "m_c is scraped up after tripping over {PRONOUN/m_c/poss} feet."
+        ]
     }
 }

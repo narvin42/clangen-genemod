@@ -431,7 +431,9 @@ class Pregnancy_Events:
                 for illness in cat.illnesses:
                     if illness in ["diarrhea, running nose, stomacheache"] and random.random() < 0.10:
                         clan.pregnancy_data[cat.ID]["wobbly"] = True
-        
+        elif random.random() < 0.02:
+            clan.pregnancy_data[cat.ID]["wobbly"] = True
+
         # if the cat is outside of the clan, they won't guess how many kits they will have
         if cat.outside:
             return

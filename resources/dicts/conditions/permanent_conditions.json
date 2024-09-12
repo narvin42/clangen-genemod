@@ -999,7 +999,7 @@
         ]
     },
     "wobbly": {
-        "severity": "minor",
+        "severity": "major",
         "congenital": "always",
         "moons_until": 1,
         "mortality": {

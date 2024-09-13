@@ -234,6 +234,10 @@
           "r_c is gentle when {PRONOUN/r_c/subject} {VERB/r_c/break/breaks} the news, but m_c had already expected it. {PRONOUN/m_c/subject/CAP} will never walk again.",
             "m_c tries to keep the disappointment down. Logically, {PRONOUN/m_c/subject} knew this was inevitable. Emotionally, {PRONOUN/m_c/subject} just can't accept that {PRONOUN/m_c/subject}'ll never walk again.",
             "m_c continues to do {PRONOUN/m_c/poss} exercises dutifully, hoping beyond hope that someday it will pay off. For now though, {PRONOUN/m_c/subject} {VERB/m_c/know/knows} this paralysis is {PRONOUN/m_c/poss} new reality."
+        ],
+        "bad back": [
+          "r_c explains to m_c that {PRONOUN/m_c/poss} back aches will be permanent.",
+          "m_c believes {PRONOUN/m_c/poss} back will always ache."
         ]
     },
     "albinism" : {

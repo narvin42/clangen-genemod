@@ -909,7 +909,7 @@
     },
     "bad back": {
         "severity": "minor",
-        "congenital": "always",
+        "congenital": "sometimes",
         "moons_until": 2,
         "mortality": {
             "newborn": 0,

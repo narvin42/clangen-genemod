@@ -430,7 +430,7 @@ class Pregnancy_Events:
 
         if len(cat.illnesses) > 0:
                 for illness in cat.illnesses:
-                    if illness in ["diarrhea, running nose, stomacheache"] and random.random() < 0.10:
+                    if (illness in ["diarrhea, running nose, stomacheache"] or clan.pregnancy_data[cat.ID]["fever_coat"] == True) and random.random() < 0.10:
                         clan.pregnancy_data[cat.ID]["wobbly"] = True
         elif random.random() < 0.02:
             clan.pregnancy_data[cat.ID]["wobbly"] = True

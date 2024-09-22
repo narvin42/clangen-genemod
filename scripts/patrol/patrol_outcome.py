@@ -495,13 +495,13 @@ class PatrolOutcome:
 
         results = []
         for _cat in cats_to_lose:
-            results.append(f"{_cat.name} has been lost.")
-            _cat.gone()
+            if not tnr or 'TNR' not in _cat.pelt.scars or tnr2:
+                results.append(f"{_cat.name} has been lost.")
+                _cat.gone()
             if tnr and 'TNR' not in _cat.pelt.scars:
                 if not tnr2:
                     _cat.pelt.scars.append("TNR")
-                _cat.get_permanent_condition("infertility", False)
-            # _cat.greif(body=False)
+                _cat.get_permanent_condition("infertility", False, custom_reveal=2 if 'pregnant' in _cat.injuries else None)
 
         return " ".join(results)
 
@@ -659,9 +659,9 @@ class PatrolOutcome:
         patrol_size_modifier = int(len(patrol.patrol_cats) * 0.5)
         for _herb in specific_herbs:
             if large_bonus:
-                amount_gotten = 4
+                amount_gotten = 6
             else:
-                amount_gotten = choices([1, 2, 3], [2, 3, 1], k=1)[0]
+                amount_gotten = choices([2, 4, 6], [2, 3, 1], k=1)[0]
 
             amount_gotten = int(amount_gotten * patrol_size_modifier)
             amount_gotten = max(1, amount_gotten)

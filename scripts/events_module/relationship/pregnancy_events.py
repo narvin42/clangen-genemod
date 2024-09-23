@@ -418,23 +418,21 @@ class Pregnancy_Events:
         # add the amount to the pregnancy dict
         clan.pregnancy_data[cat.ID]["amount"] = amount
 
-        fever = clan.pregnancy_data[cat.ID].get('fever_coat', False)
-
-        if len(cat.illnesses) > 0:
-            for illness in cat.illnesses:
-                if illness in ["greencough", "redcough", "yellowcough", "whitecough", 
-                "an infected wound", "a festering wound", "ear infection",
-                "carrionplace disease", "heat stroke", "heat exhaustion"] and random.random() < 0.33:
-                    clan.pregnancy_data[cat.ID]["fever_coat"] = True
-
         fpv = False
 
         if len(cat.illnesses) > 0:
                 for illness in cat.illnesses:
-                    if (illness in ["diarrhea, running nose, stomacheache"] or clan.pregnancy_data[cat.ID]["fever_coat"] == True) and random.random() < 0.10:
+                    if illness in ["diarrhea, running nose, stomacheache"] and random.random() < 0.10:
                         clan.pregnancy_data[cat.ID]["wobbly"] = True
         elif random.random() < 0.02:
             clan.pregnancy_data[cat.ID]["wobbly"] = True
+
+        fever = clan.pregnancy_data[cat.ID].get('fever_coat', False)
+
+        if len(cat.illnesses) > 0:
+            for illness in cat.illnesses:
+                if (illness in ["greencough", "redcough", "yellowcough", "whitecough", "an infected wound", "a festering wound", "ear infection", "carrionplace disease", "heat stroke", "heat exhaustion"] or clan.pregnancy_data[cat.ID]["wobbly"] == True) and random.random() < 0.33:
+                    clan.pregnancy_data[cat.ID]["fever_coat"] = True
 
         # if the cat is outside of the clan, they won't guess how many kits they will have
         if cat.outside:

@@ -997,9 +997,14 @@ def create_new_cat(
                 ]:
                     born_with = True
 
-                new_cat.get_permanent_condition(chosen_condition, born_with)
-                if new_cat.permanent_condition[chosen_condition]["moons_until"] == 0:
-                    new_cat.permanent_condition[chosen_condition]["moons_until"] = -2
+                    new_cat.get_permanent_condition(chosen_condition, born_with)
+                    if (
+                        new_cat.permanent_condition[chosen_condition]["moons_until"]
+                        == 0
+                    ):
+                        new_cat.permanent_condition[chosen_condition][
+                            "moons_until"
+                        ] = -2
 
                 # assign scars
                 if chosen_condition in ["lost a leg", "born without a leg"]:
@@ -3072,7 +3077,9 @@ def generate_sprite(
                                     if phenotype.caramel == 'caramel' and not is_red:    
                                         pointbase.blit(sprites.sprites['caramel0'], (0, 0))
                         
-                                    pointbase.set_alpha(204)
+                                    pointbase.set_alpha(102)
+                                    if 'fawn' in whichcolour:
+                                        pointbase.set_alpha(0)
                                     whichmain.blit(sprites.sprites['lightbasecolours0'], (0, 0))
                                     whichmain.blit(pointbase, (0, 0))
                                     pointbase.blit(whichmain, (0, 0))
@@ -3148,6 +3155,10 @@ def generate_sprite(
                                 pointbase.blit(sprites.sprites['caramel0'], (0, 0))
                         
                             pointbase.set_alpha(204)
+                            if 'lilac' in whichcolour:
+                                pointbase.set_alpha(140)
+                            if 'fawn' in whichcolour:
+                                pointbase.set_alpha(50)
                             whichmain.blit(sprites.sprites['lightbasecolours0'], (0, 0))
                             whichmain.blit(pointbase, (0, 0))
                             pointbase.blit(whichmain, (0, 0)) 

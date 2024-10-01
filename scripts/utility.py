@@ -61,8 +61,8 @@ def get_alive_clan_queens(living_cats):
         if (
             len(parents) == 1
             or len(parents) > 2
-            or all(i.gender == "male" for i in parents)
-            or parents[0].gender == "female"
+            or all(i.gender == "tom" for i in parents)
+            or parents[0].gender == "molly"
         ):
             if parents[0].ID in queen_dict:
                 queen_dict[parents[0].ID].append(cat)
@@ -1791,7 +1791,7 @@ def pronoun_repl(m, cat_pronouns_dict, raise_exception=False):
     exception, and will use a simple replacement "error" """
 
     # Add protection about the "insert" sometimes used
-    if m.group(0) == "{insert}":
+    if m.group(0) in ["{insert}", "{surrogate}"]:
         return m.group(0)
 
     inner_details = m.group(1).split("/")
@@ -1944,42 +1944,57 @@ def get_special_snippet_list(
 def find_special_list_types(text):
     """
     purely to identify which senses are being called for by a snippet abbreviation
-    returns adjusted text, sense list, and list type
+    returns adjusted text, sense list, list type, and cat_tag
     """
     senses = []
-    if "omen_list" in text:
-        list_type = "omen_list"
-    elif "prophecy_list" in text:
-        list_type = "prophecy_list"
-    elif "dream_list" in text:
-        list_type = "dream_list"
-    elif "clair_list" in text:
-        list_type = "clair_list"
-    elif "story_list" in text:
-        list_type = "story_list"
-    else:
-        return text, None, None
+    list_text = None
+    list_type = None
+    words = text.split(" ")
+    for bit in words:
+        if "_list" in bit:
+            list_text = bit
+            # just getting rid of pesky punctuation
+            list_text = list_text.replace(".", "")
+            list_text = list_text.replace(",", "")
+            break
 
-    if "_sight" in text:
+    if not list_text:
+        return text, None, None, None
+
+    parts_of_tag = list_text.split("/")
+
+    try:
+        cat_tag = parts_of_tag[1]
+    except IndexError:
+        cat_tag = None
+
+    if "omen_list" in list_text:
+        list_type = "omen_list"
+    elif "prophecy_list" in list_text:
+        list_type = "prophecy_list"
+    elif "dream_list" in list_text:
+        list_type = "dream_list"
+    elif "clair_list" in list_text:
+        list_type = "clair_list"
+    elif "story_list" in list_text:
+        list_type = "story_list"
+
+    if "_sight" in list_text:
         senses.append("sight")
-        text = text.replace("_sight", "")
-    if "_sound" in text:
+    if "_sound" in list_text:
         senses.append("sound")
-        text = text.replace("_sight", "")
-    if "_smell" in text:
-        text = text.replace("_smell", "")
+    if "_smell" in list_text:
         senses.append("smell")
-    if "_emotional" in text:
-        text = text.replace("_emotional", "")
+    if "_emotional" in list_text:
         senses.append("emotional")
-    if "_touch" in text:
-        text = text.replace("_touch", "")
+    if "_touch" in list_text:
         senses.append("touch")
-    if "_taste" in text:
-        text = text.replace("_taste", "")
+    if "_taste" in list_text:
         senses.append("taste")
 
-    return text, senses, list_type
+    text = text.replace(list_text, list_type)
+
+    return text, senses, list_type, cat_tag
 
 
 def history_text_adjust(text, other_clan_name, clan, other_cat_rc=None):
@@ -2112,6 +2127,16 @@ def event_text_adjust(
         print("WARNING: Tried to adjust text, but no text was provided.")
 
     replace_dict = {}
+
+    # special lists - this needs to happen first for pronoun tag reasons
+    text, senses, list_type, cat_tag = find_special_list_types(text)
+    if list_type:
+        sign_list = get_special_snippet_list(
+            list_type, amount=randint(1, 3), sense_groups=senses
+        )
+        text = text.replace(list_type, str(sign_list))
+        if cat_tag:
+            text = text.replace("cat_tag", cat_tag)
 
     # main_cat
     if "m_c" in text:
@@ -2259,13 +2284,7 @@ def event_text_adjust(
     # prey lists
     text = adjust_prey_abbr(text)
 
-    # special lists
-    text, senses, list_type = find_special_list_types(text)
-    if list_type:
-        sign_list = get_special_snippet_list(
-            list_type, amount=randint(1, 3), sense_groups=senses
-        )
-        text = text.replace(list_type, str(sign_list))
+
 
     # acc_plural (only works for main_cat's acc)
     if "acc_plural" in text:
@@ -2700,7 +2719,7 @@ def generate_sprite(
             if genotype.somatic["gene"] == 'sexgene':
                 genotype.sexgene = ['O', 'Y']
             phenotype = Phenotype(genotype)
-            phenotype.PhenotypeOutput(genotype.gender)
+            phenotype.PhenotypeOutput(genotype.sex)
 
         stripecolourdict = {
                 'rufousedapricot0' : 'lowred0',
@@ -3605,7 +3624,10 @@ def generate_sprite(
                         gensprite.blit(special, (0, 0))
 
                 if(genotype.pinkdilute[0] == 'dp'):
-                    gensprite.blit(sprites.sprites['redpupils' + cat_sprite], (0, 0))
+                    pupils = pygame.Surface((sprites.size, sprites.size), pygame.HWSURFACE | pygame.SRCALPHA)
+                    pupils.blit(sprites.sprites['redpupils' + cat_sprite], (0, 0))
+                    pupils.set_alpha(100)
+                    gensprite.blit(pupils, (0, 0))
             
             return gensprite
 
@@ -3613,10 +3635,10 @@ def generate_sprite(
 
         if int(cat_sprite) == 20 and cat.moons > 0:
             age = 0
-        elif int(cat_sprite) < 3 and cat.moons > 6:
+        elif int(cat_sprite) < 3 and cat.moons > 5:
             age = 4
-        elif int(cat_sprite) < 6 and cat.moons > 12:
-            age = 11
+        elif int(cat_sprite) < 6 and cat.moons > 11:
+            age = 10
         elif (int(cat_sprite == 19) or int(cat_sprite) == 17) and cat.moons > 12:
             age = 6
         gensprite.blit(GenSprite(genotype, phenotype, age), (0, 0))

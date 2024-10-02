@@ -428,6 +428,10 @@ class Pregnancy_Events:
                     if surrogate:
                         if outside_parent[0].outside:
                             print_event = f"{cat.name} brought {insert} back to camp, telling the Clan of having found a surrogate."
+                            cat.birth_cooldown = game.config["pregnancy"]["birth_cooldown"]
+                            for p in cat.mate:
+                                par = Cat.fetch_cat(p)
+                                par.birth_cooldown = game.config["pregnancy"]["birth_cooldown"]
                         else:
                             print_event = f"{cat.name} thanks {outside_parent[0].name} for being a surrogate to a litter."
                             outside_parent[0].get_injured("recovering from birth", event_triggered=True)
@@ -630,6 +634,8 @@ class Pregnancy_Events:
             if surrogate_id[0] == cat.ID:
                 cat = other_cat[0]
             surrogate.append(Cat.all_cats.get(surrogate_id[0]))
+            for p in other_cat:
+                p.birth_cooldown = game.config["pregnancy"]["birth_cooldown"]
 
         if affair_partner_id:
             if not other_cat:
@@ -798,6 +804,8 @@ class Pregnancy_Events:
             event_list.append(adding_text)
         elif not Both_Unmated and not affair_partners and not Dead_Mate and not All_Mates_Outside:
             involved_cats.append(RandomChoice.ID)
+            if surrogate:
+                involved_cats.append(surrogate[0].ID)
             event_list.append(choice(events["birth"]["two_parents"]))
         elif not affair_partners and Dead_Mate or All_Mates_Outside:
             if WhoDied != 0:
@@ -1153,7 +1161,7 @@ class Pregnancy_Events:
                     outside_parent = create_new_cat(Cat,
                             loner=cat_type in ["loner", "rogue"],
                             kittypet=cat_type == "kittypet",
-                            other_clan=cat_type == 'former Clancat',
+                            other_clan=False,
                             status=cat_type,
                             backstory=BACKSTORIES["backstory_categories"][backstories[cat_type]],
                             alive=True,
@@ -1161,6 +1169,7 @@ class Pregnancy_Events:
                             gender='fem' if 'Y' in cat.genotype.sexgene else 'masc',
                             outside=True,
                             is_parent=True)[0]
+                    outside_parent.thought = "Wonders about those oddly named cats"
                 return outside_parent
         
         # gather up mates to participate in the *selection* ig
@@ -1205,7 +1214,7 @@ class Pregnancy_Events:
                     outside_parent = create_new_cat(Cat,
                             loner=cat_type in ["loner", "rogue"],
                             kittypet=cat_type == "kittypet",
-                            other_clan=cat_type == 'former Clancat',
+                            other_clan=False,
                             status=cat_type,
                             backstory=BACKSTORIES["backstory_categories"][backstories[cat_type]],
                             alive=True,
@@ -1213,6 +1222,7 @@ class Pregnancy_Events:
                             gender='fem' if 'Y' in cat.genotype.sexgene else 'masc',
                             outside=True,
                             is_parent=True)[0]
+                    outside_parent.thought = "Wonders about those oddly named cats"
                 return outside_parent
         else:
             return None

@@ -604,6 +604,7 @@ class Pregnancy_Events:
 
         kits_amount = clan.pregnancy_data[cat.ID]["amount"]
         FeverCoat = clan.pregnancy_data[cat.ID].get("fever_coat", False)
+        Wobbly = clan.pregnancy_data[cat.ID].get("wobbly", False)
         stillborn_chance = 0
         if kits_amount == 0:  # safety check, sometimes pregnancies were ending up with 0 due to save rollbacks
             kits_amount = 1
@@ -752,9 +753,9 @@ class Pregnancy_Events:
                 kit.genotype.fevercoat = True
                 if kit.genotype.chimera:
                     kit.genotype.chimerageno.fevercoat = True
-            if clan.pregnancy_data[cat.ID].get("wobbly", False):
-                kit.get_permanent_condition("wobbly", False)
-            if random.random() < stillborn_chance or kit.genotype.manx[1] == "Ab" or kit.genotype.manx[1] == "M" or kit.genotype.fold[1] == "Fd" or kit.genotype.munch[1] == "Mk" or ('NoDBE' not in kit.genotype.pax3 and 'DBEalt' not in kit.genotype.pax3) or (clan.pregnancy_data[cat.ID].get("wobbly", False) and random.random() < 0.25):
+            if Wobbly:
+                kit.get_permanent_condition("wobbly")
+            if random.random() < stillborn_chance or kit.genotype.manx[1] == "Ab" or kit.genotype.manx[1] == "M" or kit.genotype.fold[1] == "Fd" or kit.genotype.munch[1] == "Mk" or ('NoDBE' not in kit.genotype.pax3 and 'DBEalt' not in kit.genotype.pax3) or (Wobbly == True and random.random() < 0.25):
                 kit.moons = 0
                 kit.dead = True
                 History.add_death(kit, str(kit.name) + " was stillborn.")

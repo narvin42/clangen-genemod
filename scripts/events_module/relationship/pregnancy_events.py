@@ -272,20 +272,20 @@ class Pregnancy_Events:
             if surrogate:
                 affair_partner = []
             
-            fpv = False
+            wobbly = False
             if len(cat.illnesses) > 0:
                 for illness in cat.illnesses:
                     if illness in ["diarrhea, running nose, stomacheache"] and random.random() < 0.10:
-                        clan.pregnancy_data[cat.ID]["wobbly"] = True
+                        wobbly = True
             elif random.random() < 0.02:
-                clan.pregnancy_data[cat.ID]["wobbly"] = True
+                wobbly = True
             
             fever = False
             if len(cat.illnesses) > 0:
                 for illness in cat.illnesses:
-                    if illness in ["greencough", "redcough", "yellowcough", "whitecough", 
+                    if (illness in ["greencough", "redcough", "yellowcough", "whitecough", 
                     "an infected wound", "a festering wound", "ear infection",
-                    "carrionplace disease", "heat stroke", "heat exhaustion"] and random.random() < 0.25:
+                    "carrionplace disease", "heat stroke", "heat exhaustion"] or wobbly == True) and random.random() < 0.25:
                         fever = True
 
             clan.pregnancy_data[cat.ID] = {
@@ -295,7 +295,7 @@ class Pregnancy_Events:
                 "moons": 0,
                 "amount": 0,
                 "fever_coat": fever,
-                "wobbly": fpv
+                "fpv": wobbly
             }
 
             text = choice(Pregnancy_Events.PREGNANT_STRINGS["announcement"])
@@ -394,25 +394,25 @@ class Pregnancy_Events:
                     text += f" {cat.name} thanks {outside_parent[0].name} for being a surrogate."
                     game.cur_events_list.append(Single_Event(text, "birth_death", cats_involved))
                     
-                    fpv = False
+                    wobbly = False
                     fever = False
                     ids = [cat.ID]
                     if clan.clan_settings['multisire']:
                         for c in other_cat:
                             ids.append(c.ID)
-                    if len(pregnant_cat.illnesses) > 0:
-                        for illness in pregnant_cat.illnesses:
-                            if illness in ["greencough", "redcough", "yellowcough", "whitecough", 
-                            "an infected wound", "a festering wound", "ear infection",
-                            "carrionplace disease", "heat stroke", "heat exhaustion"] and random.random() < 0.25:
-                                fever = True
-                   
                     if len(cat.illnesses) > 0:
                         for illness in cat.illnesses:
                             if illness in ["diarrhea, running nose, stomacheache"] and random.random() < 0.10:
-                              clan.pregnancy_data[cat.ID]["wobbly"] = True
+                              wobbly = True
                     elif random.random() < 0.02:
-                       clan.pregnancy_data[cat.ID]["wobbly"] = True
+                       wobbly = True
+                    if len(pregnant_cat.illnesses) > 0:
+                        for illness in pregnant_cat.illnesses:
+                            if (illness in ["greencough", "redcough", "yellowcough", "whitecough", 
+                            "an infected wound", "a festering wound", "ear infection",
+                            "carrionplace disease", "heat stroke", "heat exhaustion"] or wobbly == True) and random.random() < 0.25:
+                                fever = True
+                   
                     clan.pregnancy_data[pregnant_cat.ID] = {
                         "second_parent": ids,
                         "affair_partner" : None,
@@ -420,7 +420,7 @@ class Pregnancy_Events:
                         "moons": 0,
                         "amount": 0,
                         "fever_coat": fever,
-                        "wobbly": fpv
+                        "fpv": wobbly
                     }
                     severity = random.choices(["minor", "major"], [3, 1], k=1)
                     pregnant_cat.get_injured("pregnant", severity=severity[0])
@@ -484,22 +484,22 @@ class Pregnancy_Events:
                         ids.append(x.ID)
                 if surrogate:
                     affair_partner = []
-
-            fever = False
-            if len(pregnant_cat.illnesses) > 0:
-                for illness in pregnant_cat.illnesses:
-                    if illness in ["greencough", "redcough", "yellowcough", "whitecough", 
-                    "an infected wound", "a festering wound", "ear infection",
-                    "carrionplace disease", "heat stroke", "heat exhaustion"] and random.random() < 0.25:
-                        fever = True
             
-            fpv = False
+            wobbly = False
             if len(cat.illnesses) > 0:
                 for illness in cat.illnesses:
                     if illness in ["diarrhea, running nose, stomacheache"] and random.random() < 0.10:
-                        clan.pregnancy_data[cat.ID]["wobbly"] = True
+                        wobbly = True
             elif random.random() < 0.02:
-                clan.pregnancy_data[cat.ID]["wobbly"] = True
+                wobbly = True
+            
+            fever = False
+            if len(pregnant_cat.illnesses) > 0:
+                for illness in pregnant_cat.illnesses:
+                    if (illness in ["greencough", "redcough", "yellowcough", "whitecough", 
+                    "an infected wound", "a festering wound", "ear infection",
+                    "carrionplace disease", "heat stroke", "heat exhaustion"] or wobbly == True) and random.random() < 0.25:
+                        fever = True
 
             clan.pregnancy_data[pregnant_cat.ID] = {
                 "second_parent": ids if second_parent else None,
@@ -508,7 +508,7 @@ class Pregnancy_Events:
                 "moons": 0,
                 "amount": 0,
                 "fever_coat": fever,
-                "wobbly": fpv
+                "fpv": wobbly
             }
 
             text = choice(Pregnancy_Events.PREGNANT_STRINGS["announcement"])
@@ -538,21 +538,21 @@ class Pregnancy_Events:
         # add the amount to the pregnancy dict
         clan.pregnancy_data[cat.ID]["amount"] = amount
 
-        fpv = clan.pregnancy_data[cat.ID].get('wobbly', False)
+        wobbly = clan.pregnancy_data[cat.ID].get('wobbly', False)
 
         if len(cat.illnesses) > 0:
                 for illness in cat.illnesses:
                     if illness in ["diarrhea, running nose, stomacheache"] and random.random() < 0.10:
-                        clan.pregnancy_data[cat.ID]["wobbly"] = True
+                        wobbly = True
         elif random.random() < 0.02:
-            clan.pregnancy_data[cat.ID]["wobbly"] = True
+            wobbly = True
 
         fever = clan.pregnancy_data[cat.ID].get('fever_coat', False)
 
         if len(cat.illnesses) > 0:
             for illness in cat.illnesses:
-                if (illness in ["greencough", "redcough", "yellowcough", "whitecough", "an infected wound", "a festering wound", "ear infection", "carrionplace disease", "heat stroke", "heat exhaustion"] or clan.pregnancy_data[cat.ID]["wobbly"] == True) and random.random() < 0.33:
-                    clan.pregnancy_data[cat.ID]["fever_coat"] = True
+                if (illness in ["greencough", "redcough", "yellowcough", "whitecough", "an infected wound", "a festering wound", "ear infection", "carrionplace disease", "heat stroke", "heat exhaustion"] or wobbly == True) and random.random() < 0.33:
+                    fever = True
 
         # if the cat is outside of the clan, they won't guess how many kits they will have
         if cat.outside:

@@ -10,7 +10,7 @@ import logging
 import re
 from itertools import combinations
 from math import floor
-from random import choice, choices, randint, random, sample, randrange
+from random import choice, choices, randint, random, sample, randrange, getrandbits
 from sys import exit as sys_exit
 from copy import deepcopy
 from typing import List, Tuple
@@ -470,7 +470,7 @@ def create_new_cat_block(
     elif "old_name" in attribute_list:
         new_name = False
     else:
-        new_name = choice([True, False])
+        new_name = bool(getrandbits(1))
 
     # STATUS - must be handled before backstories
     status = None
@@ -627,7 +627,7 @@ def create_new_cat_block(
             if new_name:
                 name = f"{chosen_cat.name.prefix}"
                 spaces = name.count(" ")
-                if choice([1, 2]) == 1 and spaces > 0:  # adding suffix to OG name
+                if bool(getrandbits(1)) and spaces > 0:  # adding suffix to OG name
                     # make a list of the words within the name, then add the OG name back in the list
                     words = name.split(" ")
                     words.append(name)
@@ -883,10 +883,10 @@ def create_new_cat(
             # grab starting names and accs for loners/kittypets
             if kittypet:
                 name = choice(names.names_dict["loner_names"])
-                if choice([1, 2]) == 1:
+                if bool(getrandbits(1)):
                     accessory = choice(Pelt.collars)
             elif (
-                loner and choice([1, 2]) == 1
+                loner and bool(getrandbits(1))
             ):  # try to give name from full loner name list
                 name = choice(names.names_dict["loner_names"])
             else:
@@ -896,7 +896,7 @@ def create_new_cat(
 
             # now we make the cats
             if new_name:  # these cats get new names
-                if choice([1, 2]) == 1:  # adding suffix to OG name
+                if bool(getrandbits(1)):  # adding suffix to OG name
                     spaces = name.count(" ")
                     if spaces > 0:
                         # make a list of the words within the name, then add the OG name back in the list
@@ -2722,17 +2722,17 @@ def generate_sprite(
             phenotype.PhenotypeOutput(genotype.sex)
 
         stripecolourdict = {
-                'rufousedapricot0' : 'lowred0',
-                'mediumapricot0' : 'rufousedcream0',
-                'lowapricot0' : 'mediumcream0',
+                'rufousedapricot' : 'lowred',
+                'mediumapricot' : 'rufousedcream',
+                'lowapricot' : 'mediumcream',
 
-                'rufousedhoney-apricot0' : 'lowred0',
-                'mediumhoney-apricot0' : 'rufousedhoney0',
-                'lowhoney-apricot0' : 'mediumhoney0',
+                'rufousedhoney-apricot' : 'lowred',
+                'mediumhoney-apricot' : 'rufousedhoney',
+                'lowhoney-apricot' : 'mediumhoney',
 
-                'rufousedivory-apricot0' : 'lowhoney0',
-                'mediumivory-apricot0' : 'rufousedivory0',
-                'lowivory-apricot0' : 'mediumivory0'
+                'rufousedivory-apricot' : 'lowhoney',
+                'mediumivory-apricot' : 'rufousedivory',
+                'lowivory-apricot' : 'mediumivory'
             }
         gensprite = pygame.Surface((sprites.size, sprites.size), pygame.HWSURFACE | pygame.SRCALPHA)
                 
@@ -2780,7 +2780,7 @@ def generate_sprite(
                     stripebase.blit(sprites.sprites[stripecolour], (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
                 else:
                     surf = pygame.Surface((sprites.size, sprites.size), pygame.HWSURFACE | pygame.SRCALPHA)
-                    surf.blit(sprites.sprites[stripecolourdict.get(stripecolour, stripecolour)], (0, 0))
+                    surf.blit(sprites.sprites[stripecolourdict.get(stripecolour[:-1], stripecolour[:-1])+stripecolour[-1]], (0, 0))
                     if phenotype.caramel == 'caramel' and not ('red' in stripecolour or 'cream' in stripecolour or 'honey' in stripecolour or 'ivory' in stripecolour or 'apricot' in stripecolour):    
                         surf.blit(sprites.sprites['caramel0'], (0, 0))
 
@@ -2885,7 +2885,7 @@ def generate_sprite(
                     if(sprite_age < 4):
                         ghostingbase.set_alpha(150)
                     
-                    #whichmain.blit(ghostingbase, (0, 0))
+                    whichmain.blit(ghostingbase, (0, 0))
                 if (genotype.silver[0] == 'I' and cat.pelt.length == 'long'):
                     ghostingbase = pygame.Surface((sprites.size, sprites.size), pygame.HWSURFACE | pygame.SRCALPHA)
                     ghostingbase.blit(sprites.sprites['ghost' + cat_sprite], (0, 0))
@@ -2958,7 +2958,7 @@ def generate_sprite(
                                         whichmain = AddStripes(whichmain, 'lightbasecolours0', whichbase)
                                     else:
                                         pointbase = pygame.Surface((sprites.size, sprites.size), pygame.HWSURFACE | pygame.SRCALPHA)
-                                        pointbase.blit(sprites.sprites[stripecolourdict.get(whichcolour, whichcolour)], (0, 0))
+                                        pointbase.blit(sprites.sprites[stripecolourdict.get(whichcolour[:-1], whichcolour[:-1])+whichcolour[-1]], (0, 0))
                                         if phenotype.caramel == 'caramel' and not is_red:    
                                             pointbase.blit(sprites.sprites['caramel0'], (0, 0))
                                         pointbase.set_alpha(102)
@@ -2985,7 +2985,7 @@ def generate_sprite(
 
                             elif(genotype.pointgene == ["cb", "cb"]) and cat_sprite != "20":
                                 pointbase = pygame.Surface((sprites.size, sprites.size), pygame.HWSURFACE | pygame.SRCALPHA)
-                                pointbase.blit(sprites.sprites[stripecolourdict.get(whichcolour, whichcolour)], (0, 0))
+                                pointbase.blit(sprites.sprites[stripecolourdict.get(whichcolour[:-1], whichcolour[:-1])+whichcolour[-1]], (0, 0))
                                 if phenotype.caramel == 'caramel' and not is_red:    
                                     pointbase.blit(sprites.sprites['caramel0'], (0, 0))
                                 pointbase.set_alpha(204)
@@ -2995,7 +2995,7 @@ def generate_sprite(
                                 whichmain = AddStripes(whichmain, whichcolour, whichbase, coloursurface=pointbase2)
                             elif("cb" in genotype.pointgene) and (cat_sprite != "20" or genotype.pointgene == ["cb", "cb"]):
                                 pointbase = pygame.Surface((sprites.size, sprites.size), pygame.HWSURFACE | pygame.SRCALPHA)
-                                pointbase.blit(sprites.sprites[stripecolourdict.get(whichcolour, whichcolour)], (0, 0))
+                                pointbase.blit(sprites.sprites[stripecolourdict.get(whichcolour[:-1], whichcolour[:-1])+whichcolour[-1]], (0, 0))
                                 if phenotype.caramel == 'caramel' and not is_red:    
                                     pointbase.blit(sprites.sprites['caramel0'], (0, 0))
                                 if(genotype.eumelanin[0] == "bl"):
@@ -3107,7 +3107,7 @@ def generate_sprite(
 
                 else:
                     if(genotype.pointgene[0] == "C"):
-                        whichmain.blit(sprites.sprites[stripecolourdict.get(whichcolour, whichcolour)], (0, 0))
+                        whichmain.blit(sprites.sprites[stripecolourdict.get(whichcolour[:-1], whichcolour[:-1])+whichcolour[-1]], (0, 0))
                         if phenotype.caramel == 'caramel' and not is_red:    
                             whichmain.blit(sprites.sprites['caramel0'], (0, 0))
                             

@@ -205,7 +205,7 @@ class Pregnancy_Events:
             else:
                 names = ""
                 for x in other_cat[:-1]:
-                    names += ", " + x.name
+                    names += ", " + str(x.name)
                 names += " and " + other_cat[len(other_cat)-1]
                 print_event = f"{cat.name} {names} found {insert} and decided to adopt {insert2}."
         
@@ -658,8 +658,6 @@ class Pregnancy_Events:
             if surrogate_id[0] == cat.ID:
                 cat = other_cat[0]
             surrogate.append(Cat.all_cats.get(surrogate_id[0]))
-            for p in other_cat:
-                p.birth_cooldown = game.config["pregnancy"]["birth_cooldown"]
 
         if affair_partner_id:
             if not other_cat:
@@ -784,6 +782,12 @@ class Pregnancy_Events:
 
         # Since cat has given birth, apply the birth cooldown.
         cat.birth_cooldown = game.config["pregnancy"]["birth_cooldown"]
+        if other_cat:
+            for c in other_cat:
+                c.birth_cooldown = game.config["pregnancy"]["birth_cooldown"]
+        if surrogate:
+            for c in surrogate:
+                c.birth_cooldown = game.config["pregnancy"]["birth_cooldown"]
 
         Dead_Mate = False
         WhoDied = 0
@@ -1475,7 +1479,7 @@ class Pregnancy_Events:
             #kit.adoptive_parents = all_adoptive_parents  # Add the adoptive parents. 
             # Prevent duplicate prefixes in Clan
             tries = 0
-            extant = [kitty.name.prefix for kitty in Cat.all_cats.values() if not kitty.dead and not kitty.outside and kitty.ID != kit.ID]
+            extant = [kitty.name.prefix for kitty in all_kitten if kitty.ID != kit.ID]
             while tries < 20 and kit.name.prefix in extant:
                 kit.name = Name("newborn")
                 tries += 1

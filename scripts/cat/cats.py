@@ -2825,13 +2825,13 @@ class Cat:
                     self.create_one_relationship(other_cat)
                     self.relationships[other_cat.ID].mate = True
                 self_relationship = self.relationships[other_cat.ID]
-                self_relationship.romantic_love -= 40
-                self_relationship.comfortable -= 20
-                self_relationship.trust -= 10
+                self_relationship.romantic_love -= randint(20, 60)
+                self_relationship.comfortable -= randint(10, 30)
+                self_relationship.trust -= randint(5, 15)
                 self_relationship.mate = False
                 if fight:
-                    self_relationship.romantic_love -= 20
-                    self_relationship.platonic_like -= 30
+                    self_relationship.romantic_love -= randint(10, 30)
+                    self_relationship.platonic_like -= randint(15, 45)
 
             if not other_cat.dead:
                 if self.ID not in other_cat.relationships:
@@ -3673,7 +3673,9 @@ class Cat:
         self._moons = value
 
         updated_age = False
-        for key_age in self.age_moons.keys():
+        for key_age in self.age_moons.keys():            
+            if key_age == "senior" and value > self.age_moons[key_age][1] + 1:
+                self.age = "senior"
             if self._moons in range(
                 self.age_moons[key_age][0], self.age_moons[key_age][1] + 1
             ):
@@ -4112,9 +4114,9 @@ def create_cat(status, moons=None, biome=None, kittypet=False):
         new_cat.moons = moons
     else:
         if new_cat.moons >= 160:
-            new_cat.moons = choice(range(120, 155))
+            new_cat.moons = randint(120, 155)
         elif new_cat.moons == 0:
-            new_cat.moons = choice([1, 2, 3, 4, 5])
+            new_cat.moons = randint(1, 5)
 
     not_allowed_scars = [
         "NOPAW",

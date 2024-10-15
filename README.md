@@ -15,7 +15,7 @@ Fan-edit creator: SableSteel, and many others
 
 ## Downloads
 Note: These are developer builds and are not guaranteed to work!
-- [Nightly Link](https://nightly.link/Chinch-Bug/clangen-genemod/workflows/build/modded)
+- [Nightly Link](https://nightly.link/narvin42/genemod-expanded/workflows/build/expanded-disabilities-diseases)
 
 ## Running from source
 ClanGen uses poetry to manage virtual environments. Therefore it is required to install the dependencies and run the game from source without manual tweaking.

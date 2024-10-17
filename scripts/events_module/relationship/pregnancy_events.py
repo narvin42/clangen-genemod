@@ -426,7 +426,7 @@ class Pregnancy_Events:
                     pregnant_cat.get_injured("pregnant", severity=severity[0])
                     return
 
-                kits = Pregnancy_Events.get_kits(amount, cat, outside_parent, clan, backkit=backkit)
+                kits = Pregnancy_Events.get_kits(amount, cat, outside_parent if not surrogate else [outside_parent[0]], clan, backkit=backkit)
 
                 for kit in kits:
                     if random.random() < stillborn_chance or kit.genotype.manx[1] == "Ab" or kit.genotype.manx[1] == "M" or kit.genotype.fold[1] == "Fd" or kit.genotype.munch[1] == "Mk" or ('NoDBE' not in kit.genotype.pax3 and 'DBEalt' not in kit.genotype.pax3):
@@ -1218,7 +1218,7 @@ class Pregnancy_Events:
                 if check_cand.dead or (check_cand.outside and not only_clanmate and check_cand.status not in ['kittypet', 'loner', 'rogue', 'former Clancat']):
                     continue
                 if (x.romantic_love + x.platonic_like + x.admiration + x.trust + x.comfortable) > 20:
-                    if Pregnancy_Events.check_if_can_have_kits(check_cand, True, True) and not check_cand.mate and xor('Y' in check_cand.genotype.sexgene, 'Y' in cat.genotype.sexgene) and 'infertility' not in check_cat.permanent_condition:
+                    if Pregnancy_Events.check_if_can_have_kits(check_cand, True, True) and not check_cand.mate and xor('Y' in check_cand.genotype.sexgene, 'Y' in cat.genotype.sexgene) and 'infertility' not in check_cand.permanent_condition:
                         possible = True
                         for couple in all_cats:
                             if not couple.is_potential_mate(check_cand):

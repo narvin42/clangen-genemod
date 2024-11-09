@@ -368,7 +368,7 @@ def create_bio_parents(Cat, cat_type, flip=False, second_parent=True):
         while 'infertility' in blood_parent2.permanent_condition:
             if blood_parent2 and Cat.all_cats[blood_parent2.ID]:
                 del Cat.all_cats[blood_parent2.ID]
-            blood_parent = create_new_cat(Cat,
+            blood_parent2 = create_new_cat(Cat,
                                     loner=cat_type in ["loner", "rogue"],
                                     kittypet=cat_type == "kittypet",
                                     other_clan=cat_type == 'former Clancat',
@@ -2761,7 +2761,7 @@ def generate_sprite(
             if genotype.somatic["gene"] == 'sexgene':
                 genotype.sexgene = ['O', 'Y']
             phenotype = Phenotype(genotype)
-            phenotype.PhenotypeOutput(genotype.sex)
+            phenotype.PhenotypeOutput(genotype.white_pattern)
 
         stripecolourdict = {
                 'rufousedapricot' : 'lowred',

@@ -847,7 +847,8 @@ class Cat:
                 manx_c = 0.98
             if(random() > manx_c):
                 self.get_permanent_condition('manx syndrome', born_with=True, genetic=True)
-
+        if self.genotype.body_label == "snub-nosed":
+            self.get_permanent_condition('flat nose', born_with=True, genetic=True)
 
         if self.genotype.manx[0] == 'M' and (self.genotype.manxtype in ['rumpy', 'riser']):
             self.get_permanent_condition('born without a tail', born_with=True, genetic=True)
@@ -2345,7 +2346,7 @@ class Cat:
 
         for condition in PERMANENT:
             possible = PERMANENT[condition]
-            if possible["congenital"] in ['always', 'sometimes'] and condition not in ['albinism', 'ocular albinism', 'rabbit gait', "fully hairless", "partially hairless", "narrowed chest", "bumpy skin"]:
+            if possible["congenital"] in ['always', 'sometimes'] and condition not in ['albinism', 'ocular albinism', "flat nose", 'rabbit gait', "fully hairless", "partially hairless", "bad back", "narrowed chest", "bumpy skin"]:
                 possible_conditions.append(condition)
 
         new_condition = choice(possible_conditions)
@@ -2366,8 +2367,7 @@ class Cat:
                 f"WARNING: {name} is not in the permanent conditions collection.",
             )
             return
-        
-        if not genetic and name in ["rabbit gait", "albinism", "ocular albinism", 'fully hairless', 'partially hairless', "narrowed chest", "bumpy skin"]:
+        if not genetic and name in ["flat nose", "rabbit gait", "albinism", "ocular albinism", 'fully hairless', 'partially hairless', "bad back", "narrowed chest", "bumpy skin"]:
             return
         if "blind" in self.permanent_condition and name == "failing eyesight":
             return
@@ -2742,6 +2742,10 @@ class Cat:
 
         # Inheritance check
         if self.is_related(other_cat, first_cousin_mates):
+            return False
+
+        # check dead cats
+        if self.dead != other_cat.dead:
             return False
 
         # check for age

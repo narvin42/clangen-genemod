@@ -2346,7 +2346,7 @@ class Cat:
 
         for condition in PERMANENT:
             possible = PERMANENT[condition]
-            if possible["congenital"] in ['always', 'sometimes'] and condition not in ['albinism', 'ocular albinism', "flat nose", 'rabbit gait', "fully hairless", "partially hairless", "bad back", "narrowed chest", "bumpy skin"]:
+            if possible["congenital"] in ['always', 'sometimes'] and condition not in ['albinism', 'ocular albinism', "flat nose", 'rabbit gait', "fully hairless", "partially hairless", "narrowed chest", "bumpy skin"]:
                 possible_conditions.append(condition)
 
         new_condition = choice(possible_conditions)
@@ -2367,7 +2367,7 @@ class Cat:
                 f"WARNING: {name} is not in the permanent conditions collection.",
             )
             return
-        if not genetic and name in ["flat nose", "rabbit gait", "albinism", "ocular albinism", 'fully hairless', 'partially hairless', "bad back", "narrowed chest", "bumpy skin"]:
+        if not genetic and name in ["flat nose", "rabbit gait", "albinism", "ocular albinism", 'fully hairless', 'partially hairless', "narrowed chest", "bumpy skin"]:
             return
         if "blind" in self.permanent_condition and name == "failing eyesight":
             return

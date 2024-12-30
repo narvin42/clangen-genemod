@@ -36,6 +36,7 @@
         "narrowed chest" : "narrowed chest",
         "bumpy skin" : "bumpy skin",
         "flat nose" : "flat nose",
+        "wobbly" : "wobbly",
         "unknown_condition_risk_given": "m_c's condition has gotten worse."
     }
 }

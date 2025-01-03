@@ -987,11 +987,12 @@ class ProfileScreen(Screens):
         if the_cat.is_injured():
             if "recovering from birth" in the_cat.injuries:
                 output += i18n.t(
-                    "utility.exclamation", text=i18n.t("injuries.recovering from birth")
+                    "utility.exclamation",
+                    text=i18n.t("conditions.injuries.recovering from birth"),
                 )
             elif "pregnant" in the_cat.injuries:
                 output += i18n.t(
-                    "utility.exclamation", text=i18n.t("injuries.pregnant")
+                    "utility.exclamation", text=i18n.t("conditions.injuries.pregnant")
                 )
             else:
                 output += i18n.t("utility.exclamation", text=i18n.t("general.injured"))
@@ -1198,6 +1199,9 @@ class ProfileScreen(Screens):
             # start our history with the backstory, since all cats get one
             life_history = [str(self.get_backstory_text())]
 
+            if self.the_cat.history and len(self.the_cat.history.prev_names):
+                life_history.append(self.get_previous_names())
+
             # now get apprenticeship history and add that if any exists
             app_history = self.get_apprenticeship_text()
             if app_history:
@@ -1228,6 +1232,9 @@ class ProfileScreen(Screens):
             output = "\n\n".join(life_history)
         return output
 
+    def get_previous_names(self):
+        return "Previous names: " + ', '.join(self.the_cat.history.prev_names)
+    
     def get_backstory_text(self):
         """
         returns the backstory blurb
@@ -1398,11 +1405,11 @@ class ProfileScreen(Screens):
                     )
 
                     trait_influence.append(
-                        i18n.t(
+                        event_text_adjust(Cat, i18n.t(
                             "cat.history.training_mentor_trait_influence",
                             mentor=ment_obj.name,
                             influence=string_snippet,
-                        )
+                        ), main_cat= self.the_cat, random_cat=ment_obj)
                     )
 
             influence_history += " ".join(trait_influence)
@@ -1426,11 +1433,11 @@ class ProfileScreen(Screens):
                     )
 
                     skill_influence.append(
-                        i18n.t(
+                        event_text_adjust(Cat, i18n.t(
                             "cat.history.training_mentor_skill_influence",
                             mentor=ment_obj.name,
                             influence=string_snippet,
-                        )
+                        ), main_cat= self.the_cat, random_cat=ment_obj)
                     )
 
             influence_history += " ".join(skill_influence)

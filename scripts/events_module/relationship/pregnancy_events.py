@@ -206,7 +206,7 @@ class Pregnancy_Events:
         cats_names = str(cat.name)
         if other_cat:
             event = "hardcoded.adoption_kittens_pair"
-            cats_names = adjust_list_text([str(cat.name), str(other_cat.name)])
+            cats_names = adjust_list_text([str(cat.name)] + [str(c.name) for c in other_cat])
 
         print_event = i18n.t(
             event,
@@ -220,7 +220,7 @@ class Pregnancy_Events:
             for x in other_cat:
                 cats_involved.append(x.ID)
         for kit in kits:
-            kit.thought = i18n.t("hardcoded.new_kit_thought")
+            kit.thought = i18n.t("hardcoded.new_kit_thought", name=str(cat.name))
             cats_involved.append(kit.ID)
 
         # Normally, birth cooldown is only applied to cat who gave birth
@@ -337,7 +337,7 @@ class Pregnancy_Events:
                 unknowns = []
                 for outcat in Cat.all_cats:
                     outcat = Cat.all_cats.get(outcat)
-                    if not outcat.dead and outcat.status in ['kittypet', 'loner', 'rogue']:    
+                    if not outcat.dead and outcat.status in ['kittypet', 'loner', 'rogue', 'former Clancat']:    
                         unknowns.append(outcat)
 
                 possible_affair_partners = [i for i in unknowns if
@@ -473,8 +473,8 @@ class Pregnancy_Events:
                         for par in outside_parent:
                             if par:
                                 cats_involved.append(par.ID)
-                                cat.birth_cooldown = game.config["pregnancy"]["birth_cooldown"]
-                                cat.get_injured("recovering from birth", event_triggered=True)
+                                par.birth_cooldown = game.config["pregnancy"]["birth_cooldown"]
+                                par.get_injured("recovering from birth", event_triggered=True)
                     for kit in kits:
                         cats_involved.append(kit.ID)
                     game.cur_events_list.append(Single_Event(print_event, "birth_death", cats_involved=cats_involved))
@@ -1455,7 +1455,7 @@ class Pregnancy_Events:
                         nr_of_parents = randint(2, game.config['pregnancy']["multi-sire_max_sires"])
                     
                     thought = i18n.t(
-                        "conditions.pregnancy.halfblood_kitting_thought",
+                        "conditions.pregnancy.half_blood_kitting_thought",
                         count=kits_amount,
                     )
                     parage = randint(15,120)
@@ -1467,10 +1467,10 @@ class Pregnancy_Events:
                                                 status=cat_type,
                                                 gender='fem',
                                                 alive=choice([True, False]),
-                                                thought=thought,
                                                 age=parage,
                                                 outside=True,
                                                 is_parent=True)[0]
+                    blood_parent.thought = event_text_adjust(Cat, thought, main_cat=blood_parent)
                     blood_parent2 = []
                     
                     for i in range(0, nr_of_parents):
@@ -1491,7 +1491,7 @@ class Pregnancy_Events:
                                                         age=parage if parage > 14 else 15,
                                                         outside=True,
                                                         is_parent=True)[0]
-                        blood_par2.thought = thought
+                        blood_par2.thought = event_text_adjust(Cat, thought, main_cat=blood_par2)
 
                         blood_parent2.append(blood_par2)
 

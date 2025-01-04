@@ -272,6 +272,10 @@ def _check_cat_status(cat, statuses: list) -> bool:
     if cat.status in statuses:
         return True
 
+    if 'lost' in statuses:
+        if cat.status not in ['loner', 'kittypet', 'rogue', 'former Clancat'] and cat.outside:
+           return True
+
     return False
 
 
@@ -361,7 +365,7 @@ def _check_cat_gender(cat, genders: list) -> bool:
     }
 
     for g in genders:
-        if cat.gender in equivalents.get(g, []):
+        if cat.genderalign in equivalents.get(g, []):
             return True
 
     return False

@@ -33,12 +33,11 @@ class HerbSupply:
         self.in_need_of: list = []
 
         self.herb = {}
-        if game.clan:
-            self.base_herb_list = HERBS
-            for name in self.base_herb_list:
-                self.herb[name] = Herb(
-                    name
-                )
+        self.base_herb_list = HERBS
+        for name in self.base_herb_list:
+            self.herb[name] = Herb(
+                name
+            )
 
         # med den log for current moon
         self.log = []
@@ -250,6 +249,10 @@ class HerbSupply:
         """
         returns the rating of given supply, aka how "full" the supply is compared to clan size
         """
+        
+        if game.clan.game_mode == "classic":
+            return Supply.FULL
+
         if not self.entire_supply:
             return Supply.EMPTY
 

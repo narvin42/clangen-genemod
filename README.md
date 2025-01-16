@@ -85,7 +85,7 @@ Finally, open the `main.py` file and click the play button in the top right corn
 
 
 ## Bug Reporting
-We have migrated to GitHub Issues for bug reporting and tracking. We no longer review bug reports from the retired Google Form.
+Please report bugs with the mod itself in the genemod discord server. they're just as likely to be clangen or genemod bugs as mine
 
 ## Contributing
 If you'd like to contribute to Clangen, please read our [Contributing guide](https://github.com/ClanGenOfficial/clangen/blob/development/CONTRIBUTING.md).

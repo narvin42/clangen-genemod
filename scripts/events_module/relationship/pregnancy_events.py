@@ -1508,13 +1508,12 @@ class Pregnancy_Events:
                         kit.genotype.chimera = False
                         kit.genotype.chimerageno = None
                 
-                if randint(1, game.config["genetics_config"]["identical_twins"]) == 1:
+                if randint(1, game.config["genetics_config"]["identical_twins"]) == 1 and kits_amount < 19:
                     kits_amount += 1
                     identical = True
                 
             #kit.adoptive_parents = all_adoptive_parents  # Add the adoptive parents. 
             # Prevent duplicate prefixes in litter
-            tries = 0
             extant = [kitty.name.prefix for kitty in all_kitten if kitty.ID != kit.ID]
             while kit.name.prefix in extant:
                 kit.name = Name(Cat, kit)

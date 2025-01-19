@@ -20,6 +20,7 @@ class Name:
     if os.path.exists('resources/dicts/names/alt_prefixes.json'):
         with open('resources/dicts/names/alt_prefixes.json') as read_file:
             mod_prefixes = ujson.loads(read_file.read())
+    mod_suffixes = None
     if os.path.exists('resources/dicts/names/alt_suffixes.json'):
         with open('resources/dicts/names/alt_suffixes.json') as read_file:
             mod_suffixes = ujson.loads(read_file.read())
@@ -329,7 +330,7 @@ class Name:
     # Generate possible suffix
     def give_suffix(self, skills, personality, biome, honour=None):
         try:
-            if (not game.clan or (game.clan.clan_settings["modded names"] and game.clan.clan_settings['new suffixes'])) and skills and personality:
+            if self.mod_suffixes and (not game.clan or (game.clan.clan_settings["modded names"] and game.clan.clan_settings['new suffixes'])) and skills and personality:
                 options = []
                 for i in range(4):
                     try:
